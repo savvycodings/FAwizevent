@@ -1,0 +1,6 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/savvycodings/FEwizevent.git
+[submodule "server"]
+	path = server
+	url = https://github.com/savvycodings/BEwizevent.git
