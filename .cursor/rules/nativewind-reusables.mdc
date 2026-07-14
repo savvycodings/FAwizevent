@@ -1,0 +1,47 @@
+---
+description: NativeWind + React Native Reusables styling; port shadcn/web UI to Expo RN
+globs: app/**/*.{tsx,ts,css,js}
+alwaysApply: true
+---
+
+# Mobile UI stack (NativeWind + React Native Reusables)
+
+The Expo app lives in `app/`. Use **NativeWind** + **React Native Reusables**, not web shadcn/Next.js patterns.
+
+## Stack
+
+- **NativeWind v4**: `className` on RN components; theme via `app/global.css` + `app/tailwind.config.js`
+- **Reusables**: copy-paste primitives in `app/src/components/ui/`; add via CLI from `app/`:
+  ```bash
+  pnpm dlx @react-native-reusables/cli@latest add <component>
+  ```
+- **Aliases**: `@/components`, `@/lib/utils` → `app/src/` (`cn()` in `app/src/lib/utils.ts`)
+- **Root**: `App.tsx` imports `./global.css`, wraps with `className="dark …"`, includes `<PortalHost />` (not Expo Router `app/_layout.tsx`)
+- **Theme tokens**: `app/src/lib/theme.ts` + CSS variables in `global.css` (Wizards dark palette)
+- **Legacy**: `ThemeContext` / `ThemedCard` / `ThemedButton` still exist—prefer Reusables for new UI; extend wrappers instead of duplicating
+
+## New UI defaults
+
+- Use `className` + Tailwind utilities (`bg-card`, `text-muted-foreground`, `border-border`, etc.)
+- Use Reusables `Button`, `Text`, `Card`, `Accordion`, … with **`<Text>` inside `<Button>`**
+- Export shared UI from `app/src/components/index.ts` (full Reusables barrel; `WizardsLogo` vs `Icon` for Lucide)
+- Search bars: `SearchField` (`Input` + search icon)
+- Avoid new `StyleSheet.create` unless animation/layout needs it (e.g. `PremiumRim`)
+
+## Porting shadcn / web component libraries
+
+When the user links **shadcn/ui**, **Radix web docs**, **v0**, or any **web-first** library that “looks like shadcn”:
+
+1. **Do not** paste Next.js, `"use client"`, `div`/`span`, CSS modules, or `next/link`.
+2. **Do** treat the reference as **design + API shape** (variants, composition, states).
+3. **Prefer** installing the Reusables equivalent:
+   ```bash
+   cd app && pnpm dlx @react-native-reusables/cli@latest add <name>
+   ```
+4. If no Reusables component exists: implement with `@rn-primitives/*`, NativeWind `className`, `cva`, and `cn()`—mirror the web component’s props/variants, not its DOM.
+5. Icons: `lucide-react-native` + `app/src/components/ui/icon.tsx` (`<Icon as={ChevronDown} />`), not `lucide-react`.
+6. Docs: [NativeWind](https://www.nativewind.dev/docs), [React Native Reusables](https://reactnativereusables.com/docs)
+
+## Doctor / CLI warnings
+
+- **“Root Layout”** from `reusables doctor` is expected (React Navigation + `App.tsx`, not Expo Router)—ignore unless migrating to Expo Router.

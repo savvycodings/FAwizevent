@@ -1,0 +1,6 @@
+# Native build scripts must use LF for EAS/macOS/Linux builders.
+app/ios/.xcode.env text eol=lf
+app/ios/.xcode.env.local text eol=lf
+app/ios/**/*.sh text eol=lf
+app/android/gradlew text eol=lf
+app/android/**/*.gradle text eol=lf

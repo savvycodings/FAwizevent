@@ -4,9 +4,11 @@ This file explains how styling is done in this project: theme colors, where colo
 
 ## Core Rule
 
-- Use theme values and layout constants first.
-- Avoid hardcoded spacing values unless there is a strong design reason.
-- Prefer reusable components (`Section`, `ThemedCard`, `ThemedButton`) instead of styling from scratch each time.
+- Use **NativeWind** (`className` + Tailwind utilities) and **React Native Reusables** primitives (`Button`, `Text`, `Card` in `app/src/components/ui/`) for new UI.
+- Theme tokens live in `app/global.css` (CSS variables) and `app/tailwind.config.js`; the app root uses `className="dark"` for the Wizards palette.
+- Legacy `ThemeContext` / `theme.ts` still work for screens not yet migrated.
+- Prefer reusable components (`Section`, `ThemedCard`, `ThemedButton`, or Reusables `Button`/`Card`/`Text`) instead of styling from scratch each time.
+- Avoid hardcoded spacing values unless there is a strong design reason; use layout constants or Tailwind spacing classes.
 
 ## 1) Theme And Color System
 
@@ -41,10 +43,11 @@ These are the main values used across components:
 - `theme.tintTextColor` - text color on tinted backgrounds
 - `theme.tabBarActiveTintColor` / `theme.tabBarInactiveTintColor`
 
-Navigation/tailwind color variables are also wired in:
+Navigation and Tailwind share semantic colors via:
 
-- `NAV_THEME` in `src/theme.ts`
-- `tailwind.config.js` (CSS variable based colors like `--background`, `--primary`, etc.)
+- `app/global.css` — CSS variables (`--background`, `--primary`, etc.)
+- `app/tailwind.config.js` — maps variables to Tailwind color names (`bg-background`, `text-primary`, …)
+- Add more Reusables components: `cd app && npx @react-native-reusables/cli@latest add <component>`
 
 ## 2) Where Colors Are Used
 
